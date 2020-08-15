@@ -52,7 +52,6 @@ function main() {
                         diff = diff / 2
                     }
                 }
-                diff = Math.floor(meatValue / 2)
             }
             while (exact === 0) {
                 meatValue -= 1

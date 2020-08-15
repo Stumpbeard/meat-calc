@@ -1,0 +1,119 @@
+* {
+    color: #F4F3EE;
+    font-size: 1.3rem;
+    font-family: 'Open Sans', sans-serif;
+}
+
+html,
+body {
+    margin: 0;
+    background: #463F3A;
+    display: flex;
+    justify-content: center;
+}
+
+#content-wrapper {
+    max-width: 70ch;
+    background: #BCB8B1;
+    min-height: 90vh;
+}
+
+#content-wrapper>* {
+    padding: 1rem;
+}
+
+#title-bar {
+    background: #8A817C;
+}
+
+p {
+    color: #463F3A;
+}
+
+input {
+    border-radius: 1rem;
+    padding-left: 1rem;
+    background: #F4F3EE;
+    color: #463F3A;
+    border-style: solid;
+}
+
+button {
+    background: #E0AFA0;
+    color: #463F3A;
+    border-style: none;
+    border-radius: 0.2rem;
+}
+
+button:active {
+    background: #D28A74;
+}
+
+.icon {
+    width: 3ch;
+}
+
+.space-between {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-row {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.vertical-center {
+    display: flex;
+    align-items: center;
+}
+
+.meat-stack {
+    background-image: url("./assets/Raw_Meat.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 5ch;
+    height: 5ch;
+}
+
+.spoiled-stack {
+    background-image: url("./assets/Spoiled_Meat.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 5ch;
+    height: 5ch;
+}
+
+.dinosaur {
+    background-image: url("./assets/raptor.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+    width: 5ch;
+    height: 5ch;
+}
+
+.fed {
+    color: greenyellow;
+}
+
+.hungry {
+    color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}

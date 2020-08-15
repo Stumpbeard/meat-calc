@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Meat Calc</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+</head>
+
+<body>
+    <script src="index.js"></script>
+    <div id="content-wrapper">
+        <div id="title-bar" class="space-between">
+            <span>24 hour dinosaur feeding calculator</span>
+            <div class="vertical-center">
+                <img class="icon" src="assets/raptor.png" alt="">
+                <img class="icon" src="assets/Raw_Meat.png" alt="">
+                <img class="icon" src="assets/Spoiled_Meat.png" alt="">
+            </div>
+        </div>
+        <div id="body-content">
+            <div class="space-between">
+                <div>
+                    <input id="dino-input" type="number" placeholder="Dinosaurs">
+                    <input id="meat-input" type="number" placeholder="Raw meat">
+                </div>
+                <div>
+                    <button id="calc-button">Recalculate</button>
+                    <button id="reset-button">Reset</button>
+                </div>
+            </div>
+            <div id="not-interacted">
+                <p>This is a tool to calculate how much meat you need to feed your stationary dinosaurs for 24 hours. Enter number of dinosaurs and raw meat in your feeding trough.</p>
+                <p>All dinosaurs have the same passive food consumption rate.</p>
+                <p>Any amount of meat will spoil in about 26 hours.</p>
+            </div>
+            <div id="results" class="hidden">
+                <p class="hidden">Start with:</p>
+                <div id="dinosaurs"></div>
+                <div id="rawmeats"></div>
+                <p class="hidden">After 24 hours:</p>
+                <div id="after-dinosaurs"></div>
+                <div id="after-rawmeats"></div>
+            </div>
+            <div id="bad-input" class="hidden">
+                <p>Please only input numbers.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -27,13 +27,42 @@ function main() {
     meatInput.value = ""
     document.getElementById("calc-button").onclick = () => {
         const dinoValue = parseInt(dinoInput.value)
-        const meatValue = parseInt(meatInput.value)
+        let meatValue = parseInt(meatInput.value)
+        if (!isNaN(dinoValue) && (isNaN(meatValue) || meatValue === 0)) {
+            meatValue = 1
+        }
         if (isNaN(dinoValue) || isNaN(meatValue)) {
             document.getElementById("results").className = "hidden"
             document.getElementById("not-interacted").className = "hidden"
             document.getElementById("bad-input").className = ""
         } else {
-            recalcMeats(dinoValue, meatValue)
+            let exact = recalcMeats(dinoValue, meatValue)
+            let diff = dinoValue
+            while (exact !== 0) {
+                if (exact === -1) {
+                    meatValue += diff
+                    exact = recalcMeats(dinoValue, meatValue, false)
+                    if (exact === 1) {
+                        diff = diff / 2
+                    }
+                } else {
+                    meatValue -= diff
+                    exact = recalcMeats(dinoValue, meatValue, false)
+                    if (exact === -1) {
+                        diff = diff / 2
+                    }
+                }
+                diff = Math.floor(meatValue / 2)
+            }
+            while (exact === 0) {
+                meatValue -= 1
+                exact = recalcMeats(dinoValue, meatValue, false)
+            }
+            let p = document.createElement('p')
+            p.innerHTML = `You would need around ${meatValue + 1} raw meat to feed ${dinoValue} dinosaurs.`
+            let required = document.getElementById('total-required')
+            required.innerHTML = ""
+            required.appendChild(p)
         }
     }
     document.getElementById("reset-button").onclick = () => {
@@ -47,10 +76,14 @@ function main() {
 
 document.body.onload = main
 
-function recalcMeats(dinosaurs = 0, meats = 0) {
-    let labels = document.querySelectorAll(".hidden")
-    for (let i = 0; i < labels.length; ++i) {
-        labels[i].className = ""
+function recalcMeats(dinosaurs = 0, meats = 0, draw = true) {
+    let hungryDinos = false
+
+    if (draw) {
+        let labels = document.querySelectorAll(".hidden")
+        for (let i = 0; i < labels.length; ++i) {
+            labels[i].className = ""
+        }
     }
 
     let fullStacks = Math.floor(meats / STACK_SIZE)
@@ -67,23 +100,25 @@ function recalcMeats(dinosaurs = 0, meats = 0) {
     for (let i = 0; i < dinosaurs; ++i) {
         dinos.push(new Dino())
     }
-    const stacksContainer = document.getElementById("rawmeats")
-    const dinoContainer = document.getElementById("dinosaurs")
-    dinoContainer.innerHTML = ""
-    stacksContainer.innerHTML = ""
-    stacks.forEach(stack => {
-        let meatStack = document.createElement("div")
-        meatStack.className = "meat-stack"
-        meatStack.innerText = stack.total
-        stacksContainer.appendChild(meatStack)
-    });
-    dinos.forEach(dino => {
-        let dinosaur = document.createElement("div")
-        dinosaur.className = "dinosaur"
-        dinosaur.classList.add("fed")
-        dinosaur.innerText = "✓"
-        dinoContainer.appendChild(dinosaur)
-    });
+    if (draw) {
+        const stacksContainer = document.getElementById("rawmeats")
+        const dinoContainer = document.getElementById("dinosaurs")
+        dinoContainer.innerHTML = ""
+        stacksContainer.innerHTML = ""
+        stacks.forEach(stack => {
+            let meatStack = document.createElement("div")
+            meatStack.className = "meat-stack"
+            meatStack.innerText = stack.total
+            stacksContainer.appendChild(meatStack)
+        });
+        dinos.forEach(dino => {
+            let dinosaur = document.createElement("div")
+            dinosaur.className = "dinosaur"
+            dinosaur.classList.add("fed")
+            dinosaur.innerText = "✓"
+            dinoContainer.appendChild(dinosaur)
+        });
+    }
     removeStacks = []
     for (let i = 0; i < SECS_IN_DAY; ++i) {
         stacks.forEach(stack => {
@@ -127,6 +162,7 @@ function recalcMeats(dinosaurs = 0, meats = 0) {
             if (dino.food <= 0) {
                 if (stacks.length <= 0) {
                     dino.hungry = true
+                    hungryDinos = true
                     return
                 }
                 let lastStack = stacks[stacks.length - 1]
@@ -138,36 +174,47 @@ function recalcMeats(dinosaurs = 0, meats = 0) {
             }
         });
     }
-    const afterStacksContainer = document.getElementById("after-rawmeats")
-    const afterDinosContainer = document.getElementById("after-dinosaurs")
-    afterStacksContainer.innerHTML = ""
-    afterDinosContainer.innerHTML = ""
-    stacks.forEach(stack => {
-        let meatStack = document.createElement("div")
-        meatStack.className = "meat-stack"
-        meatStack.innerText = stack.total
-        afterStacksContainer.appendChild(meatStack)
-    });
-    spoiledStacks.forEach(stack => {
-        let meatStack = document.createElement("div")
-        meatStack.className = "spoiled-stack"
-        meatStack.innerText = stack.total
-        afterStacksContainer.appendChild(meatStack)
-    });
-    dinos.forEach(dino => {
-        let dinosaur = document.createElement("div")
-        dinosaur.className = "dinosaur"
-        if (dino.hungry) {
-            dinosaur.innerText = "X"
-            dinosaur.classList.add("hungry")
-        } else {
-            dinosaur.innerText = "✓"
-            dinosaur.classList.add("fed")
-        }
+    if (draw) {
+        const afterStacksContainer = document.getElementById("after-rawmeats")
+        const afterDinosContainer = document.getElementById("after-dinosaurs")
+        afterStacksContainer.innerHTML = ""
+        afterDinosContainer.innerHTML = ""
+        stacks.forEach(stack => {
+            let meatStack = document.createElement("div")
+            meatStack.className = "meat-stack"
+            meatStack.innerText = stack.total
+            afterStacksContainer.appendChild(meatStack)
+        });
+        spoiledStacks.forEach(stack => {
+            let meatStack = document.createElement("div")
+            meatStack.className = "spoiled-stack"
+            meatStack.innerText = stack.total
+            afterStacksContainer.appendChild(meatStack)
+        });
 
-        afterDinosContainer.appendChild(dinosaur)
-    });
-    document.getElementById("results").className = ""
-    document.getElementById("not-interacted").className = "hidden"
-    document.getElementById("bad-input").className = "hidden"
+        dinos.forEach(dino => {
+            let dinosaur = document.createElement("div")
+            dinosaur.className = "dinosaur"
+            if (dino.hungry) {
+                dinosaur.innerText = "X"
+                dinosaur.classList.add("hungry")
+            } else {
+                dinosaur.innerText = "✓"
+                dinosaur.classList.add("fed")
+            }
+
+            afterDinosContainer.appendChild(dinosaur)
+        });
+        document.getElementById("results").className = ""
+        document.getElementById("not-interacted").className = "hidden"
+        document.getElementById("bad-input").className = "hidden"
+    }
+
+    if (hungryDinos && stacks.length === 0) {
+        return -1
+    } else if (!hungryDinos && stacks.length === 0) {
+        return 0
+    } else if (!hungryDinos && stacks.length !== 0) {
+        return 1
+    }
 }
